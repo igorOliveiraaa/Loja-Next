@@ -6,6 +6,7 @@ import React, { useState } from "react"
 import { Button, Card, CardBody, CardSubtitle } from "reactstrap"
 import { ProductType } from "../services/products"
 import SuccessToast from "./SuccessToast"
+import { useCart } from "@/hooks/useCart"
 
 type ProductCardProps = {
   product: ProductType
@@ -14,41 +15,43 @@ type ProductCardProps = {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [toastIsOpen, setToastIsOpen] = useState(false)
   const { id, name, imageUrl, price } = product
+  const { addProduct } = useCart()
 
   return (
     <>
-    <Card>
-      <Link href={`/products/${id}`}>
-        <Image className="card-img-top" src={imageUrl} alt={product.name} height={250} width={600} />
-      </Link>
-
-      <CardBody>
+      <Card>
         <Link href={`/products/${id}`}>
-          <h5 className="card-title" style={{ cursor: 'pointer' }}>
-            {name}
-          </h5>
+          <Image className="card-img-top" src={imageUrl} alt={product.name} height={250} width={600} />
         </Link>
 
-        <CardSubtitle className="mb-3 text-muted" tag="h6">
-          R$ {price}
-        </CardSubtitle>
+        <CardBody>
+          <Link href={`/products/${id}`}>
+            <h5 className="card-title" style={{ cursor: 'pointer' }}>
+              {name}
+            </h5>
+          </Link>
 
-        <Button
-          color="dark"
-          className="pb-2"
-          block
-          onClick={() => {
-            setToastIsOpen(true)
-            setTimeout(() => setToastIsOpen(false), 1000 * 3)
-          }}
-        >
-          Adicionar ao Carrinho
-        </Button>
+          <CardSubtitle className="mb-3 text-muted" tag="h6">
+            R$ {price}
+          </CardSubtitle>
 
-      </CardBody>
-    </Card>
+          <Button
+            color="dark"
+            className="pb-2"
+            block
+            onClick={() => {
+              addProduct(product)
+              setToastIsOpen(true)
+              setTimeout(() => setToastIsOpen(false), 1000 * 3)
+            }}
+          >
+            Adicionar ao Carrinho
+          </Button>
 
-    <SuccessToast toastIsOpen={toastIsOpen} setToastIsOpen={setToastIsOpen} />
+        </CardBody>
+      </Card>
+
+      <SuccessToast toastIsOpen={toastIsOpen} setToastIsOpen={setToastIsOpen} />
     </>
   )
 }
