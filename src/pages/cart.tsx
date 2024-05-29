@@ -8,6 +8,10 @@ import { Container } from "reactstrap"
 const Cart: NextPage = () => {
   return (
     <>
+
+
+      <Header />
+
       <main>
         <Container className="mb-5">
           <h1 className="my-5">
